@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Librería Virtual</title>
+  <link rel="stylesheet" href="Diseño.css">
+</head>
+<body>
+  <!-- LOGIN -->
+  <section id="loginSection" class="container">
+    <h1> Librería Virtual</h1>
+    <h3>Inicia sesión</h3>
+    <input type="text" id="user" placeholder="Usuario">
+    <input type="password" id="pass" placeholder="Contraseña">
+    <button id="btnLogin">Entrar</button>
+    <p id="msgError" class="error"></p>
+  </section>
+
+  <!-- MENÚ PRINCIPAL -->
+  <section id="menuSection" class="container hidden">
+    <h2>Menú Principal</h2>
+    <div class="menu">
+      <button id="btnLeidos" class="menu-btn"> Libros leídos</button>
+      <button id="btnBiblioteca" class="menu-btn"> Biblioteca</button>
+      <button id="btnPorLeer" class="menu-btn"> Por leer</button>
+      <button id="btnComprar" class="menu-btn"> Comprar libros</button>
+    </div>
+    <button id="btnSalir" class="salir">Cerrar sesión</button>
+  </section>
+
+  <!-- LEÍDOS -->
+  <section id="leidosSection" class="container hidden">
+    <h2> Libros leídos</h2>
+    <ul id="listaLeidos"></ul>
+    <button class="volver">⬅ Volver</button>
+  </section>
+
+  <!-- BIBLIOTECA -->
+  <section id="bibliotecaSection" class="container hidden">
+    <h2> Biblioteca</h2>
+    <input type="text" id="tituloInput" placeholder="Escribe un título">
+    <button id="btnAgregar">Agregar libro</button>
+    <ul id="listaLibros"></ul>
+    <button class="volver">⬅ Volver</button>
+  </section>
+
+  <!-- POR LEER -->
+  <section id="porLeerSection" class="container hidden">
+    <h2> Libros por leer</h2>
+    <ul id="listaPorLeer"></ul>
+    <button class="volver">⬅ Volver</button>
+  </section>
+
+  <!-- COMPRAR LIBROS -->
+  <section id="comprarSection" class="container hidden">
+    <h2> Tienda de Libros</h2>
+    <div id="tienda" class="tienda"></div>
+    <button class="volver">⬅ Volver</button>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
