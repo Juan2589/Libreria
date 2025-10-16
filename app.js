@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const tienda = document.getElementById("tienda");
 
-  // --- LOGIN ---
   btnLogin.addEventListener("click", () => {
     const user = document.getElementById("user").value.trim();
     const pass = document.getElementById("pass").value.trim();
@@ -38,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // --- MENÚ PRINCIPAL ---
   btnLeidos.addEventListener("click", () => mostrarSeccion(leidosSection));
   btnBiblioteca.addEventListener("click", () => mostrarSeccion(bibliotecaSection));
   btnPorLeer.addEventListener("click", () => mostrarSeccion(porLeerSection));
@@ -49,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
     seccion.classList.remove("hidden");
   }
 
-  // --- VOLVER ---
   document.querySelectorAll(".volver").forEach(btn => {
     btn.addEventListener("click", () => {
       [leidosSection, bibliotecaSection, porLeerSection, comprarSection].forEach(s => s.classList.add("hidden"));
@@ -57,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // --- AGREGAR LIBROS MANUALMENTE ---
   btnAgregar.addEventListener("click", () => {
     const titulo = tituloInput.value.trim();
     if (titulo === "") return alert("Escribe el título del libro");
@@ -73,7 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
     tituloInput.value = "";
   });
 
-  // --- AGREGAR A BIBLIOTECA ---
   function agregarLibroBiblioteca(libro) {
     const card = document.createElement("div");
     card.classList.add("card");
@@ -83,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
       <p>${libro.precio || ""}</p>
     `;
 
-    // 👉 Abrir el PDF al hacer clic en imagen o título
     const abrirPDF = () => {
       if (libro.pdf) window.open(libro.pdf, "_blank");
       else alert("Este libro no tiene PDF asignado 📘");
@@ -99,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const btnPendiente = document.createElement("button");
-    btnPendiente.textContent = "⏳ Por leer";
+    btnPendiente.textContent = "📖 Por leer";
     btnPendiente.addEventListener("click", () => {
       agregarLibroPorLeer(libro);
       card.remove();
@@ -110,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
     listaLibros.appendChild(card);
   }
 
-  // --- AGREGAR A LEÍDOS ---
   function agregarLibroLeido(libro) {
     const card = document.createElement("div");
     card.classList.add("card");
@@ -122,7 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
     listaLeidos.appendChild(card);
   }
 
-  // --- AGREGAR A POR LEER ---
   function agregarLibroPorLeer(libro) {
     const card = document.createElement("div");
     card.classList.add("card");
@@ -133,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
 
     const btnLeido = document.createElement("button");
-    btnLeido.textContent = "✅ Leído";
+    btnLeido.textContent = "✔ Leído";
     btnLeido.addEventListener("click", () => {
       agregarLibroLeido(libro);
       card.remove();
@@ -143,39 +135,106 @@ document.addEventListener("DOMContentLoaded", () => {
     listaPorLeer.appendChild(card);
   }
 
-  // --- TIENDA ---
   const librosTienda = [
-    { titulo: "El Rap De Aca", precio: "$45.000", img: "Imagenes/rapdpg.jpg", pdf: "Pdf/elrap.pdf" },
-    { titulo: "La Divina Comedia", precio: "$55.000", img: "Imagenes/divina.jpg", pdf: "Pdf/divinacomedia.pdf" },
+    { titulo: "El Rap De Aca", precio: "$57.000", img: "Imagenes/rapdpg.jpg", pdf: "Pdf/elrap.pdf" },
+    { titulo: "La Divina Comedia", precio: "$59.000", img: "Imagenes/divina.jpg", pdf: "Pdf/divinacomedia.pdf" },
     { titulo: "Tupac Shakur", precio: "$80.000", img: "Imagenes/tupac.jpg", pdf: "Pdf/Tupac.pdf" },
-    { titulo: "El caballero de la armadura oxidada", precio: "$40.000", img: "Imagenes/caballero.jpg", pdf: "Pdf/Elcaballero.pdf" }
+    { titulo: "El caballero de la armadura oxidada", precio: "$89.000", img: "Imagenes/caballero.jpg", pdf: "Pdf/Elcaballero.pdf" },
+    { titulo: "Satanas", precio: "$90.000", img: "Imagenes/satanas.jpg", pdf: "Pdf/cienanos.pdf" },
+    { titulo: "El Principito", precio: "$45.000", img: "Imagenes/principito.jpg", pdf: "Pdf/principito.pdf" },
+    { titulo: "Cien Años de Soledad", precio: "$90.000", img: "Imagenes/cien.jpg", pdf: "Pdf/cienanos.pdf" },
+    { titulo: "Don Quijote de la Mancha", precio: "$78.000", img: "Imagenes/donquijote.jpg", pdf: "Pdf/quijote.pdf" }
   ];
 
-  librosTienda.forEach(libro => {
-    const card = document.createElement("div");
-    card.classList.add("card");
+  const librosPorPagina = 4;
+  let paginaActual = 1;
 
-    card.innerHTML = `
-      <img src="${libro.img}" alt="${libro.titulo}">
-      <h3>${libro.titulo}</h3>
-      <p>${libro.precio}</p>
-    `;
+  function mostrarTienda() {
+    tienda.innerHTML = "";
 
-    const btnComprarLibro = document.createElement("button");
-    btnComprarLibro.textContent = "🛒 Comprar";
-    btnComprarLibro.addEventListener("click", () => {
-      alert(`Compraste "${libro.titulo}"`);
-      agregarLibroPorLeer(libro);
-      agregarLibroBiblioteca(libro);
+    const inicio = (paginaActual - 1) * librosPorPagina;
+    const fin = inicio + librosPorPagina;
+    const librosPagina = librosTienda.slice(inicio, fin);
+
+    librosPagina.forEach(libro => {
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.innerHTML = `
+        <img src="${libro.img}" alt="${libro.titulo}">
+        <h3>${libro.titulo}</h3>
+        <p>${libro.precio}</p>
+      `;
+
+      const btnComprarLibro = document.createElement("button");
+      btnComprarLibro.textContent = "🛒 Comprar";
+      btnComprarLibro.addEventListener("click", () => {
+        const yaExiste =
+          Array.from(listaPorLeer.children).some(card => card.querySelector("h3")?.textContent === libro.titulo) ||
+          Array.from(listaLibros.children).some(card => card.querySelector("h3")?.textContent === libro.titulo);
+
+        if (yaExiste) {
+          alert(`El libro "${libro.titulo}" ya lo compraste, mi H 🔁`);
+        } else {
+          alert(`Compraste "${libro.titulo}" con éxito 🛒🔥`);
+          agregarLibroPorLeer(libro);
+          agregarLibroBiblioteca(libro);
+        }
+      });
+
+      card.appendChild(btnComprarLibro);
+      tienda.appendChild(card);
     });
 
-    card.appendChild(btnComprarLibro);
-    tienda.appendChild(card);
-  });
+    mostrarControlesPaginacion();
+  }
 
-  // --- CERRAR SESIÓN ---
+  function mostrarControlesPaginacion() {
+    const contenedorPaginas = document.createElement("div");
+    contenedorPaginas.classList.add("paginacion");
+
+    const totalPaginas = Math.ceil(librosTienda.length / librosPorPagina);
+
+    const btnAnterior = document.createElement("button");
+    btnAnterior.textContent = "⬅️ Anterior";
+    btnAnterior.disabled = paginaActual === 1;
+    btnAnterior.addEventListener("click", () => {
+      if (paginaActual > 1) {
+        paginaActual--;
+        mostrarTienda();
+      }
+    });
+
+    const btnSiguiente = document.createElement("button");
+    btnSiguiente.textContent = "Siguiente ➡️";
+    btnSiguiente.disabled = paginaActual === totalPaginas;
+    btnSiguiente.addEventListener("click", () => {
+      if (paginaActual < totalPaginas) {
+        paginaActual++;
+        mostrarTienda();
+      }
+    });
+
+    contenedorPaginas.appendChild(btnAnterior);
+    contenedorPaginas.appendChild(btnSiguiente);
+    tienda.appendChild(contenedorPaginas);
+  }
+
+  mostrarTienda();
+
   btnSalir.addEventListener("click", () => {
     menuSection.classList.add("hidden");
     loginSection.classList.remove("hidden");
   });
+});
+
+
+const btnPrev = document.getElementById("btnPrev");
+const btnNext = document.getElementById("btnNext");
+
+btnPrev.addEventListener("click", () => {
+  tienda.scrollBy({ left: -300, behavior: "smooth" });
+});
+
+btnNext.addEventListener("click", () => {
+  tienda.scrollBy({ left: 300, behavior: "smooth" });
 });
